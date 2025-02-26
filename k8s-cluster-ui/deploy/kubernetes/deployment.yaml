@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-cluster-ui
+  labels:
+    app: k8s-cluster-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cluster-ui
+  template:
+    metadata:
+      labels:
+        app: k8s-cluster-ui
+    spec:
+      containers:
+      - name: k8s-cluster-ui
+        image: k8s-cluster-ui:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+          name: api
+        - containerPort: 8080
+          name: frontend
+        env:
+        - name: API_HOST
+          value: "0.0.0.0"
+        - name: API_PORT
+          value: "5000"
+        - name: DEBUG
+          value: "False"
+        - name: ENABLE_CORS
+          value: "True"

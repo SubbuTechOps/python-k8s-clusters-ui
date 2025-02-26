@@ -1,0 +1,20 @@
+nohup: ignoring input
+[2025-02-26 18:05:09 +0000] [1813600] [INFO] Starting gunicorn 20.1.0
+[2025-02-26 18:05:09 +0000] [1813600] [INFO] Listening at: http://0.0.0.0:9001 (1813600)
+[2025-02-26 18:05:09 +0000] [1813600] [INFO] Using worker: sync
+[2025-02-26 18:05:09 +0000] [1813602] [INFO] Booting worker with pid: 1813602
+[2025-02-26 18:05:09 +0000] [1813603] [INFO] Booting worker with pid: 1813603
+[2025-02-26 18:05:09 +0000] [1813604] [INFO] Booting worker with pid: 1813604
+[2025-02-26 18:05:09 +0000] [1813605] [INFO] Booting worker with pid: 1813605
+[2025-02-26 18:08:45 +0000] [1813600] [CRITICAL] WORKER TIMEOUT (pid:1813604)
+[2025-02-26 18:08:45 +0000] [1813600] [CRITICAL] WORKER TIMEOUT (pid:1813605)
+[2025-02-26 18:08:45 +0000] [1813605] [INFO] Worker exiting (pid: 1813605)
+[2025-02-26 18:08:45 +0000] [1813604] [INFO] Worker exiting (pid: 1813604)
+Looking for static files in: /home/ubuntu/k8s-cluster-ui/frontend
+Looking for static files in: /home/ubuntu/k8s-cluster-ui/frontend
+[2025-02-26 18:08:45 +0000] [1813792] [INFO] Booting worker with pid: 1813792
+[2025-02-26 18:08:45 +0000] [1813793] [INFO] Booting worker with pid: 1813793
+[2025-02-26 18:10:58 +0000] [1813600] [CRITICAL] WORKER TIMEOUT (pid:1813603)
+[2025-02-26 18:10:58 +0000] [1813603] [INFO] Worker exiting (pid: 1813603)
+Looking for static files in: /home/ubuntu/k8s-cluster-ui/frontend
+[2025-02-26 18:10:58 +0000] [1813830] [INFO] Booting worker with pid: 1813830

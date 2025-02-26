@@ -1,0 +1,33 @@
+/* Custom styles for K8s Cluster UI */
+
+body {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+.cluster-card {
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.cluster-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.resource-badge {
+    font-size: 0.8rem;
+    margin-right: 5px;
+}
+
+.status-ready {
+    color: #28a745;
+}
+
+.status-pending {
+    color: #ffc107;
+}
+
+.status-error {
+    color: #dc3545;
+}
