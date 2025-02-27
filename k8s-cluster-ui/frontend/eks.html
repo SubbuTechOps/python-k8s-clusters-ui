@@ -3,53 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K8s Clusters Dashboard - AWS EKS</title>
+    <title>SubbuK8sConsole - EKS Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <style>
-        .cluster-card {
-            transition: transform 0.2s;
-            cursor: pointer;
+        :root {
+            --primary-color: #3366cc;
+            --secondary-color: #ff9900;
+            --dark-bg: #1a2334;
+            --light-bg: #f8f9fa;
+            --accent-color: #00c851;
+            --text-color: #333;
+            --text-light: #f8f9fa;
+            --card-bg: #ffffff;
+            --card-border: #e5e9f0;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
         }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: #f5f7fa;
+        }
+        
+        .navbar {
+            background: var(--dark-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.7rem 1rem;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .brand-logo {
+            margin-right: 10px;
+        }
+        
+        .brand-highlight {
+            color: var(--secondary-color);
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            margin: 0 0.2rem;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .container {
+            padding: 20px;
+        }
+        
+        h2 {
+            color: var(--dark-bg);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .text-muted {
+            color: #6c757d !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary-color) !important;
+            border-color: var(--secondary-color) !important;
+            color: #333 !important;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e08a00 !important;
+            border-color: #e08a00 !important;
+        }
+        
+        .btn-outline-secondary {
+            color: #555;
+            border-color: #ccc;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .cluster-card {
+            transition: all 0.3s;
+            cursor: pointer;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: none;
+            height: 100%;
+        }
+        
         .cluster-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        .resource-badge {
-            font-size: 0.8rem;
-            margin-right: 5px;
+        
+        .card-header {
+            background-color: var(--dark-bg) !important;
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
         }
-        .status-ready {
-            color: #28a745;
-        }
-        .status-pending {
-            color: #ffc107;
-        }
-        .status-error {
-            color: #dc3545;
-        }
-        .aws-orange {
-            color: #ff9900;
-        }
+        
         .aws-badge {
-            background-color: #232f3e;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+        }
+        
+        .card-body {
+            padding: 1.2rem;
+        }
+        
+        .text-muted {
+            color: #6c757d !important;
+        }
+        
+        small.text-muted {
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-ready {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            color: var(--warning-color);
+            font-weight: 600;
+        }
+        
+        .status-error {
+            color: var(--danger-color);
+            font-weight: 600;
+        }
+        
+        .card-footer {
+            background-color: rgba(0,0,0,0.02);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding: 1rem;
+        }
+        
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 4px;
+        }
+        
+        .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: #dc3545;
             color: white;
         }
-        .region-selector {
-            max-width: 300px;
+        
+        .view-resources-btn {
+            background-color: var(--secondary-color) !important;
+            border-color: var(--secondary-color) !important;
+        }
+        
+        .view-resources-btn:hover {
+            background-color: #e08a00 !important;
+            border-color: #e08a00 !important;
+        }
+        
+        #resources-container .card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: none;
+        }
+        
+        .nav-tabs {
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            color: #555;
+            font-weight: 600;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -1px;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            border-color: transparent transparent var(--secondary-color) transparent;
+            color: #333 !important;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: var(--secondary-color) !important;
+            border-color: transparent transparent var(--secondary-color) transparent;
+            background-color: transparent;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table th {
+            font-weight: 600;
+            color: #333;
+            border-top: none;
+            border-bottom: 2px solid #dee2e6;
+            padding: 1rem;
+        }
+        
+        .table td {
+            padding: 0.8rem 1rem;
+            vertical-align: middle;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+        
+        .modal-content {
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+        }
+        
+        .modal-header {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 1.2rem;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #444;
+        }
+        
+        .form-control, .form-select {
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.25rem rgba(255, 153, 0, 0.25);
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .form-check-input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.25rem rgba(255, 153, 0, 0.25);
+        }
+        
+        .modal-footer {
+            padding: 1.2rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        #no-clusters-message {
+            background-color: white;
+            border-radius: 10px;
+            padding: 3rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .aws-orange {
+            color: var(--secondary-color);
+        }
+        
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.4rem;
+        }
+        
+        .alert {
+            border-radius: 8px;
+            padding: 1rem;
+            font-weight: 500;
+        }
+        
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border-color: rgba(220, 53, 69, 0.2);
+        }
+        
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border-color: rgba(40, 167, 69, 0.2);
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #232f3e;">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <span class="aws-orange me-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M18.75 10.5L12 17.25L5.25 10.5L6.75 9L12 14.25L17.25 9L18.75 10.5Z"/>
-                    </svg>
+                <span class="brand-logo">
+                    <i class="fas fa-cubes"></i>
                 </span>
-                EKS Clusters Dashboard
+                Subbu<span class="brand-highlight">K8s</span>Console
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -57,7 +350,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                        <a class="nav-link" aria-current="page" href="index.html">Home</a>
+                    </li> 
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">EKS Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addClusterModal">Add Cluster</a>
@@ -65,6 +361,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#discoverClustersModal">Discover Clusters</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="test.html">API Test</a>
+                    </li> 
                 </ul>
             </div>
         </div>
@@ -77,17 +376,11 @@
                 <p class="text-muted">Connect and monitor your AWS EKS clusters</p>
             </div>
             <div class="col-auto">
-                <button class="btn btn-primary" style="background-color: #ff9900; border-color: #ff9900;" data-bs-toggle="modal" data-bs-target="#addClusterModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                        <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-                    </svg>
-                    Add Cluster
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addClusterModal">
+                    <i class="fas fa-plus-circle me-2"></i>Add Cluster
                 </button>
                 <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#discoverClustersModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-                    </svg>
-                    Discover Clusters
+                    <i class="fas fa-search me-2"></i>Discover Clusters
                 </button>
             </div>
         </div>
@@ -95,9 +388,7 @@
         <div class="row" id="clusters-container">
             <!-- Connected clusters will be displayed here -->
             <div class="col-12 text-center py-5 text-muted" id="no-clusters-message">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#ff9900" class="bi bi-diagram-3" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5zM3 11.5A1.5 1.5 0 0 1 4.5 10h1A1.5 1.5 0 0 1 7 11.5v1A1.5 1.5 0 0 1 5.5 14h-1A1.5 1.5 0 0 1 3 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm4.5.5a1.5 1.5 0 0 1 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5v1a1.5 1.5 0 0 1-1.5 1.5h-1A1.5 1.5 0 0 1 9 12.5zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5z"/>
-                </svg>
+                <i class="fas fa-cubes fa-4x mb-3" style="color: var(--secondary-color);"></i>
                 <h4 class="mt-3">No clusters connected</h4>
                 <p>Add an EKS cluster to start monitoring, or discover available clusters</p>
             </div>
@@ -106,31 +397,35 @@
         <div class="row mt-4" id="resources-container" style="display: none;">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #f8f9fa;">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0" id="selected-cluster-name">Cluster Resources</h5>
                         <div>
                             <button class="btn btn-sm btn-outline-secondary" id="refresh-resources">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
-                                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
-                                </svg>
-                                Refresh
+                                <i class="fas fa-sync-alt me-1"></i>Refresh
                             </button>
                         </div>
                     </div>
                     <div class="card-body">
                         <ul class="nav nav-tabs" id="resourceTabs" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="pods-tab" data-bs-toggle="tab" data-bs-target="#pods" type="button" role="tab" aria-controls="pods" aria-selected="true">Pods</button>
+                                <button class="nav-link active" id="pods-tab" data-bs-toggle="tab" data-bs-target="#pods" type="button" role="tab" aria-controls="pods" aria-selected="true">
+                                    <i class="fas fa-cubes me-2"></i>Pods
+                                </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="deployments-tab" data-bs-toggle="tab" data-bs-target="#deployments" type="button" role="tab" aria-controls="deployments" aria-selected="false">Deployments</button>
+                                <button class="nav-link" id="deployments-tab" data-bs-toggle="tab" data-bs-target="#deployments" type="button" role="tab" aria-controls="deployments" aria-selected="false">
+                                    <i class="fas fa-rocket me-2"></i>Deployments
+                                </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="services-tab" data-bs-toggle="tab" data-bs-target="#services" type="button" role="tab" aria-controls="services" aria-selected="false">Services</button>
+                                <button class="nav-link" id="services-tab" data-bs-toggle="tab" data-bs-target="#services" type="button" role="tab" aria-controls="services" aria-selected="false">
+                                    <i class="fas fa-network-wired me-2"></i>Services
+                                </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="nodes-tab" data-bs-toggle="tab" data-bs-target="#nodes" type="button" role="tab" aria-controls="nodes" aria-selected="false">Nodes</button>
+                                <button class="nav-link" id="nodes-tab" data-bs-toggle="tab" data-bs-target="#nodes" type="button" role="tab" aria-controls="nodes" aria-selected="false">
+                                    <i class="fas fa-server me-2"></i>Nodes
+                                </button>
                             </li>
                         </ul>
                         <div class="tab-content mt-3" id="resourceTabsContent">
@@ -226,8 +521,10 @@
     <div class="modal fade" id="addClusterModal" tabindex="-1" aria-labelledby="addClusterModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #232f3e; color: white;">
-                    <h5 class="modal-title" id="addClusterModalLabel">Connect to EKS Cluster</h5>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addClusterModalLabel">
+                        <i class="fas fa-plug me-2"></i>Connect to EKS Cluster
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -268,13 +565,13 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="auth-type" id="auth-credentials" value="credentials" checked>
                                 <label class="form-check-label" for="auth-credentials">
-                                    AWS Credentials
+                                    <i class="fas fa-key me-2"></i>AWS Credentials
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="auth-type" id="auth-profile" value="profile">
                                 <label class="form-check-label" for="auth-profile">
-                                    AWS Profile (locally configured)
+                                    <i class="fas fa-user me-2"></i>AWS Profile (locally configured)
                                 </label>
                             </div>
                         </div>
@@ -291,7 +588,7 @@
                                 <label for="aws-session-token" class="form-label">AWS Session Token (optional)</label>
                                 <input type="password" class="form-control" id="aws-session-token">
                                 <div class="form-text">
-                                    Required only for temporary credentials with MFA or assumed roles
+                                    <i class="fas fa-info-circle me-1"></i>Required only for temporary credentials with MFA or assumed roles
                                 </div>
                             </div>
                         </div>
@@ -299,7 +596,7 @@
                             <label for="aws-profile" class="form-label">AWS Profile Name</label>
                             <input type="text" class="form-control" id="aws-profile" placeholder="default">
                             <div class="form-text">
-                                Name of a profile in your local AWS credentials file (~/.aws/credentials)
+                                <i class="fas fa-info-circle me-1"></i>Name of a profile in your local AWS credentials file (~/.aws/credentials)
                             </div>
                         </div>
                         <div class="alert alert-danger d-none" id="connection-error"></div>
@@ -307,8 +604,10 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="connect-button" style="background-color: #ff9900; border-color: #ff9900;">Connect</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="connect-button">
+                        <i class="fas fa-plug me-2"></i>Connect
+                    </button>
                 </div>
             </div>
         </div>
@@ -318,8 +617,10 @@
     <div class="modal fade" id="discoverClustersModal" tabindex="-1" aria-labelledby="discoverClustersModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #232f3e; color: white;">
-                    <h5 class="modal-title" id="discoverClustersModalLabel">Discover EKS Clusters</h5>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="discoverClustersModalLabel">
+                        <i class="fas fa-search me-2"></i>Discover EKS Clusters
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -356,19 +657,19 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="discover-auth-type" id="discover-auth-credentials" value="credentials" checked>
                                 <label class="form-check-label" for="discover-auth-credentials">
-                                    AWS Credentials
+                                    <i class="fas fa-key me-2"></i>AWS Credentials
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="discover-auth-type" id="discover-auth-profile" value="profile">
                                 <label class="form-check-label" for="discover-auth-profile">
-                                    AWS Profile (locally configured)
+                                    <i class="fas fa-user me-2"></i>AWS Profile (locally configured)
                                 </label>
                             </div>
                         </div>
                         <div id="discover-credentials-container">
                             <div class="mb-3">
-                                <label for="discover-aws-access-key" class="form-label">AWS Access Key ID</label>
+                                <label for="discover-aws-access-key" class="form-label">AWS Access Key ID<label for="discover-aws-access-key" class="form-label">AWS Access Key ID</label>
                                 <input type="text" class="form-control" id="discover-aws-access-key">
                             </div>
                             <div class="mb-3">
@@ -388,7 +689,9 @@
                     </form>
                     
                     <div id="discovered-clusters-container" class="mt-4 d-none">
-                        <h6>Available Clusters</h6>
+                        <h6 class="mb-3">
+                            <i class="fas fa-server me-2"></i>Available Clusters
+                        </h6>
                         <div class="table-responsive">
                             <table class="table table-hover" id="discovered-clusters-table">
                                 <thead>
@@ -408,8 +711,10 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="discover-button" style="background-color: #ff9900; border-color: #ff9900;">Discover Clusters</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="discover-button">
+                        <i class="fas fa-search me-2"></i>Discover Clusters
+                    </button>
                 </div>
             </div>
         </div>
@@ -417,8 +722,27 @@
 
     <script>
         // API URL - change to your backend URL
-        const API_URL = 'http://localhost:5000/api';
+        const API_URL = '/api';  // Changed from 'http://localhost:5000/api'
         let currentConnectionId = null;
+
+        // Helper function for retry logic
+        async function retryOperation(operation, maxRetries = 3, delay = 1000) {
+            let lastError;
+            
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+                try {
+                    return await operation(); // Success, exit retry loop
+                } catch (error) {
+                    lastError = error;
+                    console.log(`Attempt ${attempt}/${maxRetries} failed: ${error.message}. Retrying in ${delay}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 1.5; // Increase delay for next retry
+                }
+            }
+            
+            // If we get here, all retries failed
+            throw lastError;
+        }
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
@@ -479,6 +803,7 @@
                 });
             });
 
+
             // Load clusters on page load
             fetchClusters();
         });
@@ -493,8 +818,10 @@
             const successElement = document.getElementById('connection-success');
             
             // Reset messages
-            errorElement.classList.add('d-none');
-            successElement.classList.add('d-none');
+            if (!isDirectConnect) {
+                errorElement.classList.add('d-none');
+                successElement.classList.add('d-none');
+            }
             
             // Get form values
             let requestData = {};
@@ -560,65 +887,68 @@
             // Show loading state
             if (!isDirectConnect) {
                 connectButton.disabled = true;
-                connectButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Connecting...';
+                connectButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Connecting...';
             }
             
             try {
-                const response = await fetch(`${API_URL}/clusters/connect`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestData),
-                });
-                
-                const data = await response.json();
-                
-                if (response.ok && data.success) {
-                    // Connection successful
-                    if (!isDirectConnect) {
-                        successElement.textContent = data.message;
-                        successElement.classList.remove('d-none');
+                // Use retry logic for connection
+                const connectionOperation = async () => {
+                    const response = await fetch(`${API_URL}/clusters/connect`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData),
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok || !data.success) {
+                        throw new Error(data.message || 'Connection failed');
                     }
                     
-                    // Refresh clusters list
-                    fetchClusters();
+                    return data;
+                };
+                
+                const data = await retryOperation(connectionOperation);
+                
+                // Connection successful
+                if (!isDirectConnect) {
+                    successElement.textContent = data.message;
+                    successElement.classList.remove('d-none');
+                }
+                
+                // Refresh clusters list
+                fetchClusters();
+                
+                // Reset form (optional)
+                if (!isDirectConnect) {
+                    document.getElementById('connect-cluster-form').reset();
                     
-                    // Reset form (optional)
-                    if (!isDirectConnect) {
-                        document.getElementById('connect-cluster-form').reset();
-                        
-                        // Close modal after a short delay
-                        setTimeout(() => {
-                            const modal = bootstrap.Modal.getInstance(document.getElementById('addClusterModal'));
-                            modal.hide();
-                        }, 1500);
-                    } else {
-                        // Close discover modal
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('discoverClustersModal'));
-                        modal.hide();
-                    }
+                    // Close modal after a short delay
+                    setTimeout(() => {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('addClusterModal'));
+                        if (modal) modal.hide();
+                    }, 1500);
                 } else {
-                    // Connection failed
-                    if (!isDirectConnect) {
-                        errorElement.textContent = data.message || 'Failed to connect to cluster';
-                        errorElement.classList.remove('d-none');
-                    } else {
-                        alert('Failed to connect to cluster: ' + (data.message || 'Unknown error'));
-                    }
+                    // Close discover modal after a short delay
+                    setTimeout(() => {
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('discoverClustersModal'));
+                        if (modal) modal.hide();
+                    }, 1000);
                 }
             } catch (error) {
                 if (!isDirectConnect) {
                     errorElement.textContent = 'Error connecting to cluster: ' + error.message;
                     errorElement.classList.remove('d-none');
                 } else {
-                    alert('Error connecting to cluster: ' + error.message);
+                    console.error('Error connecting to cluster:', error.message);
                 }
             } finally {
                 // Reset button state
                 if (!isDirectConnect) {
                     connectButton.disabled = false;
-                    connectButton.innerHTML = 'Connect';
+                    connectButton.innerHTML = '<i class="fas fa-plug me-2"></i>Connect';
                 }
             }
         }
@@ -674,20 +1004,29 @@
             
             // Show loading state
             discoverButton.disabled = true;
-            discoverButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Discovering...';
+            discoverButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Discovering...';
             
             try {
-                const response = await fetch(`${API_URL}/clusters/available`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestData),
-                });
+                // Use retry logic for discovery
+                const discoveryOperation = async () => {
+                    const response = await fetch(`${API_URL}/clusters/available`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(requestData),
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    return await response.json();
+                };
                 
-                const data = await response.json();
+                const data = await retryOperation(discoveryOperation);
                 
-                if (response.ok && data.success) {
+                if (data.success) {
                     // Clear table
                     clustersTable.innerHTML = '';
                     
@@ -722,7 +1061,7 @@
                                             data-cluster-name="${cluster.name}" 
                                             data-region="${region}"
                                             ${cluster.status !== 'ACTIVE' ? 'disabled' : ''}>
-                                        Connect
+                                        <i class="fas fa-plug me-1"></i>Connect
                                     </button>
                                 </td>
                             `;
@@ -738,6 +1077,24 @@
                                 connectToCluster(null, clusterName, region);
                             });
                         });
+                        
+                        // NEW: Auto-connect to all active clusters
+                        const activeButtons = document.querySelectorAll('.connect-discovered-btn:not([disabled])');
+                        if (activeButtons.length > 0) {
+                            // Connect to the first active cluster automatically
+                            const firstButton = activeButtons[0];
+                            const clusterName = firstButton.getAttribute('data-cluster-name');
+                            const region = firstButton.getAttribute('data-region');
+                            
+                            // Mark button as connecting
+                            firstButton.disabled = true;
+                            firstButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>';
+                            
+                            // Connect after a short delay
+                            setTimeout(() => {
+                                connectToCluster(null, clusterName, region);
+                            }, 500);
+                        }
                     }
                     
                     // Show the clusters container
@@ -753,7 +1110,7 @@
             } finally {
                 // Reset button state
                 discoverButton.disabled = false;
-                discoverButton.innerHTML = 'Discover Clusters';
+                discoverButton.innerHTML = '<i class="fas fa-search me-2"></i>Discover Clusters';
             }
         }
 
@@ -795,27 +1152,31 @@
                 clusterElement.className = 'col-md-4 mb-4';
                 clusterElement.innerHTML = `
                     <div class="card cluster-card h-100" data-connection-id="${cluster.connection_id}">
-                        <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #232f3e; color: white;">
+                        <div class="card-header d-flex justify-content-between align-items-center">
                             <h6 class="mb-0">${clusterInfo.name}</h6>
                             <span class="badge aws-badge">${clusterInfo.version || 'N/A'}</span>
                         </div>
                         <div class="card-body">
                             <div class="mb-2">
                                 <small class="text-muted d-block">Region</small>
-                                <span>${clusterInfo.region}</span>
+                                <span><i class="fas fa-globe-americas me-1"></i>${clusterInfo.region}</span>
                             </div>
                             <div class="mb-2">
                                 <small class="text-muted d-block">Status</small>
-                                <span class="status-ready">${clusterInfo.status || 'Active'}</span>
+                                <span class="status-ready"><i class="fas fa-check-circle me-1"></i>${clusterInfo.status || 'Active'}</span>
                             </div>
                             <div>
                                 <small class="text-muted d-block">Endpoint</small>
-                                <span class="text-truncate d-block" style="max-width: 100%;">${clusterInfo.endpoint || 'N/A'}</span>
+                                <span class="text-truncate d-block" style="max-width: 100%;"><i class="fas fa-link me-1"></i>${clusterInfo.endpoint || 'N/A'}</span>
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-between">
-                            <button class="btn btn-sm btn-primary view-resources-btn" style="background-color: #ff9900; border-color: #ff9900;">View Resources</button>
-                            <button class="btn btn-sm btn-outline-danger disconnect-btn">Disconnect</button>
+                            <button class="btn btn-sm btn-primary view-resources-btn">
+                                <i class="fas fa-server me-1"></i>View Resources
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger disconnect-btn">
+                                <i class="fas fa-unlink me-1"></i>Disconnect
+                            </button>
                         </div>
                     </div>
                 `;
@@ -880,7 +1241,7 @@
                     tableBody.innerHTML = `
                         <tr>
                             <td colspan="${resourceType === 'nodes' ? '6' : '5'}" class="text-center text-danger">
-                                Error loading ${resourceType}: ${data.message}
+                                <i class="fas fa-exclamation-triangle me-1"></i>Error loading ${resourceType}: ${data.message}
                             </td>
                         </tr>
                     `;
@@ -890,7 +1251,7 @@
                 tableBody.innerHTML = `
                     <tr>
                         <td colspan="${resourceType === 'nodes' ? '6' : '5'}" class="text-center text-danger">
-                            Error: ${error.message}
+                            <i class="fas fa-exclamation-triangle me-1"></i>Error: ${error.message}
                         </td>
                     </tr>
                 `;
@@ -920,30 +1281,37 @@
                 if (resourceType === 'pods') {
                     // Format status for coloring
                     let statusClass = '';
+                    let statusIcon = '';
                     if (item.status === 'Running') {
                         statusClass = 'status-ready';
+                        statusIcon = '<i class="fas fa-check-circle me-1"></i>';
                     } else if (item.status === 'Pending') {
                         statusClass = 'status-pending';
+                        statusIcon = '<i class="fas fa-clock me-1"></i>';
                     } else if (item.status === 'Failed' || item.status === 'Error') {
                         statusClass = 'status-error';
+                        statusIcon = '<i class="fas fa-exclamation-circle me-1"></i>';
                     }
                     
                     row.innerHTML = `
-                        <td>${item.name}</td>
+                        <td><i class="fas fa-cube me-1"></i>${item.name}</td>
                         <td>${item.namespace}</td>
-                        <td><span class="${statusClass}">${item.status}</span></td>
+                        <td><span class="${statusClass}">${statusIcon}${item.status}</span></td>
                         <td>${item.node}</td>
                         <td>${formatDate(item.created_at)}</td>
                     `;
                 } else if (resourceType === 'deployments') {
                     // Format for deployments
                     const availabilityClass = item.available_replicas >= item.replicas ? 'status-ready' : 'status-pending';
+                    const availabilityIcon = item.available_replicas >= item.replicas ? 
+                        '<i class="fas fa-check-circle me-1"></i>' : 
+                        '<i class="fas fa-exclamation-triangle me-1"></i>';
                     
                     row.innerHTML = `
-                        <td>${item.name}</td>
+                        <td><i class="fas fa-rocket me-1"></i>${item.name}</td>
                         <td>${item.namespace}</td>
                         <td>${item.replicas}</td>
-                        <td><span class="${availabilityClass}">${item.available_replicas} / ${item.replicas}</span></td>
+                        <td><span class="${availabilityClass}">${availabilityIcon}${item.available_replicas} / ${item.replicas}</span></td>
                         <td>${formatDate(item.created_at)}</td>
                     `;
                 } else if (resourceType === 'services') {
@@ -953,7 +1321,7 @@
                     ).join('<br>');
                     
                     row.innerHTML = `
-                        <td>${item.name}</td>
+                        <td><i class="fas fa-network-wired me-1"></i>${item.name}</td>
                         <td>${item.namespace}</td>
                         <td>${item.type}</td>
                         <td>${item.cluster_ip}</td>
@@ -962,11 +1330,14 @@
                 } else if (resourceType === 'nodes') {
                     // Format for nodes
                     const statusClass = item.status === 'Ready' ? 'status-ready' : 'status-error';
+                    const statusIcon = item.status === 'Ready' ? 
+                        '<i class="fas fa-check-circle me-1"></i>' : 
+                        '<i class="fas fa-exclamation-circle me-1"></i>';
                     const rolesDisplay = item.roles.length ? item.roles.join(', ') : 'none';
                     
                     row.innerHTML = `
-                        <td>${item.name}</td>
-                        <td><span class="${statusClass}">${item.status}</span></td>
+                        <td><i class="fas fa-server me-1"></i>${item.name}</td>
+                        <td><span class="${statusClass}">${statusIcon}${item.status}</span></td>
                         <td>${rolesDisplay}</td>
                         <td>${item.instance_type}</td>
                         <td>${item.zone}</td>
@@ -976,6 +1347,29 @@
                 
                 tableBody.appendChild(row);
             });
+        }
+
+        async function listPods() {
+            // Ensure we have connection details
+            if (!globalConnectionDetails) {
+                logError('Please connect to a cluster first by clicking "Test Connect to Cluster"');
+                return;
+            }
+
+            try {
+                // Use connection ID from last successful connection
+                const connectionId = globalConnectionDetails.connection_id;
+                
+                // Use the correct endpoint pattern that matches your backend API
+                console.log(`Attempting to list pods using connection ID: ${connectionId}`);
+                const data = await safeFetch(`/api/clusters/${connectionId}/resources/pods`);
+                
+                document.getElementById('results').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('error-log').textContent = '';
+                return;
+            } catch (error) {
+                logError('List pods failed: ' + error.message, error);
+            }
         }
 
         // Disconnect a cluster

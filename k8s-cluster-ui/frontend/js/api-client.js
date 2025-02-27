@@ -9,7 +9,7 @@ class K8sClusterAPI {
      * Initialize the API client
      * @param {string} baseUrl - Base URL for the API
      */
-    constructor(baseUrl = 'http://localhost:5000/api') {
+    constructor(baseUrl = '/api') {  // Changed from 'http://localhost:5000/api'
         this.baseUrl = baseUrl;
     }
 

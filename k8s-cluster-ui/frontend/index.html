@@ -3,64 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>K8s Clusters Dashboard</title>
+    <title>SubbuK8sConsole - Multi-Cloud Kubernetes Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #3366cc;
+            --secondary-color: #ff9900;
+            --dark-bg: #1a2334;
+            --dark-blue: #0a192f;
+            --light-bg: #f8f9fa;
+            --accent-color: #00c851;
+            --text-color: #333;
+            --text-light: #f8f9fa;
+            --gke-color: #4285f4;
+            --eks-color: #ff9900;
+        }
+        
         body {
-            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--text-color);
         }
+        
+        .navbar {
+            background: var(--dark-bg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.7rem 1rem;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .brand-logo {
+            margin-right: 10px;
+        }
+        
+        .brand-highlight {
+            color: var(--secondary-color);
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            margin: 0 0.2rem;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+        
+        .hero-section {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+            text-align: center;
+            margin-bottom: 3rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+        }
+        
+        .section-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #666;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
         .dashboard-card {
-            transition: transform 0.3s, box-shadow 0.3s;
             height: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+            margin-bottom: 30px;
         }
+        
         .dashboard-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
+        
+        .card-header {
+            padding: 1.2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-header i {
+            margin-right: 10px;
+        }
+        
         .card-img-wrapper {
-            height: 200px;
+            height: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 25px;
+            background-color: white;
         }
-        .card-img {
-            max-height: 100%;
-            max-width: 100%;
+        
+        .card-body {
+            padding: 1.5rem;
+            background-color: white;
         }
-        .gke-card {
-            border-color: #4285f4;
+        
+        .card-title {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
         }
+        
+        .card-text {
+            color: #666;
+            margin-bottom: 1.5rem;
+            min-height: 80px;
+        }
+        
+        .card-footer {
+            background-color: white;
+            padding: 1.2rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .btn-dashboard {
+            padding: 0.8rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
         .gke-card .card-header {
-            background-color: #4285f4;
+            background-color: var(--gke-color);
             color: white;
         }
-        .eks-card {
-            border-color: #ff9900;
+        
+        .btn-gke {
+            background-color: var(--gke-color);
+            border-color: var(--gke-color);
         }
+        
+        .btn-gke:hover {
+            background-color: #3b78e7;
+            border-color: #3b78e7;
+        }
+        
         .eks-card .card-header {
-            background-color: #232f3e;
+            background-color: var(--dark-bg);
             color: white;
+        }
+        
+        .btn-eks {
+            background-color: var(--eks-color);
+            border-color: var(--eks-color);
+            color: #222;
+        }
+        
+        .btn-eks:hover {
+            background-color: #e68a00;
+            border-color: #e68a00;
+            color: #222;
+        }
+        
+        .getting-started {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .getting-started-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            color: var(--dark-bg);
+        }
+        
+        .getting-started-title i {
+            margin-right: 0.75rem;
+            color: var(--accent-color);
+        }
+        
+        .steps-list {
+            padding-left: 0;
+            list-style: none;
+        }
+        
+        .steps-list li {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 1.2rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .steps-list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .steps-list li:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.2rem;
+            width: 1.8rem;
+            height: 1.8rem;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .steps-list li:nth-child(1):before { content: '1'; }
+        .steps-list li:nth-child(2):before { content: '2'; }
+        .steps-list li:nth-child(3):before { content: '3'; }
+        
+        .step-text {
+            font-size: 1.1rem;
+        }
+        
+        .footer {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-title i {
+            margin-right: 0.75rem;
+        }
+        
+        .footer-text {
+            color: #bbb;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links {
+            padding-left: 0;
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-links a {
+            color: #bbb;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .footer-copyright {
+            color: #999;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-diagram-3 me-2" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5v-1zM8.5 5a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1zM0 11.5A1.5 1.5 0 0 1 1.5 10h1A1.5 1.5 0 0 1 4 11.5v1A1.5 1.5 0 0 1 2.5 14h-1A1.5 1.5 0 0 1 0 12.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1zm4.5.5A1.5 1.5 0 0 1 7.5 10h1a1.5 1.5 0 0 1 1.5 1.5v1A1.5 1.5 0 0 1 8.5 14h-1A1.5 1.5 0 0 1 6 12.5v-1zm1.5-.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-1z"/>
-                </svg>
-                K8s Clusters Dashboard
+                <div class="brand-logo">
+                    <i class="fas fa-cubes fa-lg"></i>
+                </div>
+                Subbu<span class="brand-highlight">K8s</span>Console
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="eks.html">EKS Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="gke.html">GKE Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="test.html">API Test</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://kubernetes.io/docs/home/" target="_blank">Kubernetes Docs</a>
@@ -70,89 +333,109 @@
         </div>
     </nav>
 
-    <div class="container py-5">
-        <div class="text-center mb-5">
-            <h1>Welcome to K8s Clusters Dashboard</h1>
-            <p class="lead">Connect to and monitor your Kubernetes clusters across multiple cloud providers</p>
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="section-title">Welcome to <span class="brand-highlight">SubbuK8s</span>Console</h1>
+            <p class="section-subtitle">Connect to and monitor your Kubernetes clusters across multiple cloud providers with our powerful, intuitive dashboard</p>
         </div>
+    </section>
 
+    <div class="container">
         <div class="row g-4">
             <div class="col-md-6">
-                <div class="card dashboard-card gke-card">
+                <div class="dashboard-card gke-card">
                     <div class="card-header">
-                        <h5 class="mb-0">Google Kubernetes Engine (GKE)</h5>
+                        <i class="fab fa-google"></i> Google Kubernetes Engine (GKE)
                     </div>
                     <div class="card-img-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" fill="#4285f4" class="card-img" viewBox="0 0 24 24">
-                            <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm-1 16.23l-6-3v-5.5l6 3v5.5zm-1-8L4 6.47 10 3l6 3.47-6 3.48zm8 5l-6 3v-5.5l6-3v5.5z"/>
-                        </svg>
+                        <img src="https://storage.googleapis.com/gweb-cloudblog-publish/images/GKE_color.max-500x500.png" alt="GKE Logo" height="120">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">GKE Dashboard</h5>
                         <p class="card-text">Connect to and monitor your Google Kubernetes Engine clusters. View pods, deployments, services, and nodes in real-time.</p>
                     </div>
                     <div class="card-footer">
-                        <a href="index.html" class="btn btn-primary w-100" style="background-color: #4285f4; border-color: #4285f4;">
-                            Open GKE Dashboard
+                        <a href="gke.html" class="btn btn-dashboard btn-gke w-100">
+                            <i class="fas fa-external-link-alt me-2"></i>Open GKE Dashboard
                         </a>
                     </div>
                 </div>
             </div>
             
             <div class="col-md-6">
-                <div class="card dashboard-card eks-card">
+                <div class="dashboard-card eks-card">
                     <div class="card-header">
-                        <h5 class="mb-0">Amazon Elastic Kubernetes Service (EKS)</h5>
+                        <i class="fab fa-aws"></i> Amazon Elastic Kubernetes Service (EKS)
                     </div>
                     <div class="card-img-wrapper">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" fill="#ff9900" class="card-img" viewBox="0 0 24 24">
-                            <path d="M18.75 10.5L12 17.25L5.25 10.5L6.75 9L12 14.25L17.25 9L18.75 10.5Z"/>
-                        </svg>
+                        <img src="https://d1.awsstatic.com/partner-network/QuickStart/logos/amazon-eks-logo.c8b258cb0c31562d1e2910ede4011da88710d7cd.png" alt="EKS Logo" height="120">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">EKS Dashboard</h5>
                         <p class="card-text">Connect to and monitor your Amazon Elastic Kubernetes Service clusters. Discover available clusters in your AWS regions.</p>
                     </div>
                     <div class="card-footer">
-                        <a href="eks.html" class="btn btn-primary w-100" style="background-color: #ff9900; border-color: #ff9900;">
-                            Open EKS Dashboard
+                        <a href="eks.html" class="btn btn-dashboard btn-eks w-100">
+                            <i class="fas fa-external-link-alt me-2"></i>Open EKS Dashboard
                         </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-5">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0">Getting Started</h5>
-                    </div>
-                    <div class="card-body">
-                        <p>To get started with K8s Clusters Dashboard:</p>
-                        <ol>
-                            <li>Choose the cloud provider dashboard you want to use (GKE or EKS)</li>
-                            <li>Connect to your existing clusters or discover available clusters</li>
-                            <li>View resources and monitor your Kubernetes environment</li>
-                        </ol>
-                        <p>For more information on how to use this dashboard, please refer to the <a href="#">User Guide</a>.</p>
-                    </div>
-                </div>
+        <div class="getting-started">
+            <h3 class="getting-started-title">
+                <i class="fas fa-rocket"></i>
+                Getting Started
+            </h3>
+            <ul class="steps-list">
+                <li>
+                    <div class="step-text">Choose the cloud provider dashboard you want to use (GKE or EKS)</div>
+                </li>
+                <li>
+                    <div class="step-text">Connect to your existing clusters or discover available clusters</div>
+                </li>
+                <li>
+                    <div class="step-text">View resources and monitor your Kubernetes environment</div>
+                </li>
+            </ul>
+            <div class="mt-4">
+                <a href="#" class="btn btn-outline-primary">
+                    <i class="fas fa-book me-2"></i>User Guide
+                </a>
             </div>
         </div>
     </div>
 
-    <footer class="bg-dark text-white py-4 mt-5">
+    <footer class="footer">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5>K8s Clusters Dashboard</h5>
-                    <p>A web application for connecting to and monitoring multiple Kubernetes clusters.</p>
+                    <h5 class="footer-title">
+                        <i class="fas fa-cubes"></i> SubbuK8sConsole
+                    </h5>
+                    <p class="footer-text">A comprehensive web application for connecting to and monitoring multiple Kubernetes clusters across cloud providers.</p>
                 </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2025 Your Organization</p>
-                    <p>Version 1.0.0</p>
+                <div class="col-md-3">
+                    <h5 class="footer-title">Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Release Notes</a></li>
+                    </ul>
                 </div>
+                <div class="col-md-3">
+                    <h5 class="footer-title">Resources</h5>
+                    <ul class="footer-links">
+                        <li><a href="https://kubernetes.io/docs/home/" target="_blank">Kubernetes Docs</a></li>
+                        <li><a href="https://aws.amazon.com/eks/" target="_blank">EKS Documentation</a></li>
+                        <li><a href="https://cloud.google.com/kubernetes-engine/docs" target="_blank">GKE Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-copyright text-center">
+                <p>&copy; 2025 SubbuTechOps. All rights reserved.</p>
+                <p>Version 1.0.0</p>
             </div>
         </div>
     </footer>
