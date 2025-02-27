@@ -465,11 +465,24 @@ class EKSConnector:
             ]
         }
         
-        # Add profile if it exists
-        if hasattr(aws_session, '_session') and aws_session._session.profile_name:
-            profile_name = aws_session._session.profile_name
-            print(f"Adding profile '{profile_name}' to kubeconfig")
-            kubeconfig["users"][0]["user"]["exec"]["args"].extend(["--profile", profile_name])
+        # Add profile if it exists - safely check for profile_name
+        try:
+            profile_name = None
+            # Try to get profile name safely
+            if hasattr(aws_session, '_session'):
+                if hasattr(aws_session._session, 'profile_name'):
+                    profile_name = aws_session._session.profile_name
+            
+            # Alternative method to get profile name if above doesn't work
+            if profile_name is None and hasattr(aws_session, 'profile_name'):
+                profile_name = aws_session.profile_name
+                
+            if profile_name:
+                print(f"Adding profile '{profile_name}' to kubeconfig")
+                kubeconfig["users"][0]["user"]["exec"]["args"].extend(["--profile", profile_name])
+        except Exception as e:
+            print(f"Warning: Couldn't add profile to kubeconfig: {str(e)}")
+            # Continue without profile - will use default credentials
         
         return kubeconfig
     

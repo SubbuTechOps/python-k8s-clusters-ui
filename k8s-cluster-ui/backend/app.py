@@ -9,7 +9,7 @@ print(f"Looking for static files in: {static_folder_path}")
 
 # Initialize Flask app and CORS
 app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})  
 
 # Lazy initialization for EKS connector
 def get_eks_connector():
