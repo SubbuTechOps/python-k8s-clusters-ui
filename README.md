@@ -5,6 +5,65 @@
 SubbuK8sConsole is a powerful web-based application designed to simplify Kubernetes cluster management across multiple cloud providers. It provides a unified interface to connect to and monitor clusters from Amazon EKS (Elastic Kubernetes Service), offering comprehensive insights into your Kubernetes infrastructure.
 
 ## Architecture
+```mermaid
+flowchart TD
+    subgraph "Frontend"
+        UI[Web UI Interface]
+        UI_EKS[EKS Dashboard]
+        UI_GKE[GKE Dashboard]
+        UI_TEST[API Test Page]
+        UI --> UI_EKS
+        UI --> UI_GKE
+        UI --> UI_TEST
+    end
+
+    subgraph "Backend Server"
+        FLASK[Flask Web Server]
+        PERSIST[Persistent EKS/GKE Connector]
+        API[REST API Endpoints]
+        
+        FLASK --> API
+        API <--> PERSIST
+    end
+
+    subgraph "Cloud Providers"
+        AWS[AWS APIs]
+        GCP[Google Cloud APIs]
+        
+        subgraph "Kubernetes APIs"
+            K8S_API[Kubernetes API]
+            PODS[Pods]
+            DEPLOY[Deployments]
+            SVC[Services]
+            NODES[Nodes]
+            
+            K8S_API --> PODS
+            K8S_API --> DEPLOY
+            K8S_API --> SVC
+            K8S_API --> NODES
+        end
+        
+        AWS --> K8S_API
+        GCP --> K8S_API
+    end
+
+    UI_EKS <--> API
+    UI_GKE <--> API
+    UI_TEST <--> API
+    
+    PERSIST <--> AWS
+    PERSIST <--> GCP
+    
+    classDef frontend fill:#f9f9f9,stroke:#333,stroke-width:2px
+    classDef backend fill:#e6f3ff,stroke:#333,stroke-width:2px
+    classDef cloud fill:#f5f5f5,stroke:#333,stroke-width:2px
+    classDef k8s fill:#e7f2e7,stroke:#333,stroke-width:2px
+    
+    class UI,UI_EKS,UI_GKE,UI_TEST frontend
+    class FLASK,PERSIST,API backend
+    class AWS,GCP cloud
+    class K8S_API,PODS,DEPLOY,SVC,NODES k8s
+```
 
 ### System Architecture
 
