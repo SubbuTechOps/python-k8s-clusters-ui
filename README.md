@@ -1,269 +1,186 @@
-# EKS Dashboard Documentation
+# SubbuK8sConsole Documentation
 
 ## Application Overview
 
-EKS Dashboard is a web-based application for monitoring and managing Amazon EKS (Elastic Kubernetes Service) clusters. It provides a simple interface to connect to EKS clusters, discover available clusters in AWS accounts, and view Kubernetes resources like pods, deployments, services, and nodes.
+SubbuK8sConsole is a powerful web-based application designed to simplify Kubernetes cluster management across multiple cloud providers. It provides a unified interface to connect to and monitor clusters from Amazon EKS (Elastic Kubernetes Service) and Google Kubernetes Engine (GKE), offering comprehensive insights into your Kubernetes infrastructure.
+
+## Key Features 🌟
+
+- **Multi-Cloud Support**: Seamlessly manage and monitor AWS EKS and GKE clusters from a single dashboard
+- **Comprehensive Cluster Insights**: 
+  - Real-time visibility into nodes, pods, deployments, and services
+  - Detailed resource information across different Kubernetes environments
+- **Secure & Scalable Authentication**: 
+  - Supports multiple authentication methods
+  - Leverages Kubeconfig, AWS Boto3, and Google Cloud SDK
+- **User-Friendly Interface**: 
+  - Responsive design built with Bootstrap
+  - Intuitive navigation and resource management
+- **Powerful API-Driven Architecture**:
+  - Efficient interaction with cloud provider and Kubernetes APIs
+  - Robust backend for retrieving and displaying cluster data
 
 ## Architecture
 
-The application follows a client-server architecture with the following components:
+The application follows a modern client-server architecture with robust, scalable components:
 
 ### Backend
 
-- **Flask Application**: Python-based web server that handles API requests
-- **EKS Connector**: Core component that manages connections to EKS clusters using AWS and Kubernetes APIs
-- **API Endpoints**: RESTful endpoints for cluster operations and resource retrieval
+- **Flask Microservices**: Python-based web server handling API requests
+- **Multi-Cloud Connectors**: 
+  - EKS Connector for AWS clusters
+  - GKE Connector for Google Cloud clusters
+- **RESTful API Endpoints**: Comprehensive cluster and resource management operations
 
 ### Frontend
 
-- **Dashboard UI**: HTML/CSS/JavaScript-based interface for managing clusters
-- **API Test Page**: Utility page for testing API connectivity
-- **Bootstrap 5**: Used for responsive UI components
+- **Dynamic Dashboard UI**: 
+  - HTML5, CSS3, and JavaScript-powered interface
+  - Bootstrap 5 for responsive design
+- **API Integration Page**: Utility for testing and exploring API capabilities
 
 ### Technical Stack
 
 - **Backend**:
   - Python 3.x
   - Flask web framework
-  - boto3 (AWS SDK for Python)
-  - kubernetes-client (Python client for Kubernetes API)
-  - YAML and JSON for configuration and data exchange
+  - boto3 (AWS SDK)
+  - google-cloud-kubernetes-client
+  - kubernetes-client (Python Kubernetes API)
+  - YAML and JSON for configuration
 
 - **Frontend**:
   - HTML5
   - CSS3
   - JavaScript (ES6+)
-  - Bootstrap 5.3.0 (for UI components)
+  - Bootstrap 5.3.0
 
 ## Deployment
 
 ### Prerequisites
 
-1. Python 3.6 or higher
+1. Python 3.6+
 2. pip (Python package manager)
-3. AWS CLI configured with appropriate permissions
-4. Access to AWS EKS clusters
-5. kubectl configured (optional, for verification)
+3. AWS CLI and Google Cloud SDK
+4. Configured cloud provider credentials
+5. kubectl (optional, for verification)
 
 ### Installation Steps
 
-1. **Clone the repository**:
-   ```
-   git clone <repository-url>
-   cd eks-dashboard
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/yourusername/SubbuK8sConsole.git
+   cd SubbuK8sConsole
    ```
 
-2. **Install backend dependencies**:
-   ```
+2. **Install Dependencies**:
+   ```bash
    pip install -r requirements.txt
    ```
 
-3. **Configure the application**:
-   - Ensure AWS credentials are available either through:
-     - Environment variables
-     - ~/.aws/credentials file
-     - IAM roles (if running on EC2)
+3. **Configure Cloud Credentials**:
+   - AWS: Configure using AWS CLI or environment variables
+   - Google Cloud: Set up Google Cloud authentication
+   - Ensure appropriate IAM permissions for cluster access
 
-4. **Run the application**:
-   ```
+4. **Run the Application**:
+   ```bash
    python app.py
    ```
+   The application will start on http://0.0.0.0:8000
 
-   The application will start a web server on http://0.0.0.0:8000
+### Docker Deployment
 
-### Docker Deployment (Optional)
-
-1. **Build the Docker image**:
-   ```
-   docker build -t eks-dashboard .
-   ```
-
-2. **Run the container**:
-   ```
-   docker run -p 8000:8000 -v ~/.aws:/root/.aws eks-dashboard
+1. **Build Docker Image**:
+   ```bash
+   docker build -t subbu-k8s-console .
    ```
 
-### AWS ECS/Fargate Deployment (Optional)
-
-For production deployments, consider using Amazon ECS or Fargate:
-
-1. Create an ECR repository
-2. Push the Docker image to ECR
-3. Create an ECS task definition that includes the AWS credential mounting
-4. Configure appropriate IAM roles for the ECS task
-5. Deploy as a service with a load balancer
+2. **Run Container**:
+   ```bash
+   docker run -p 8000:8000 \
+     -v ~/.aws:/root/.aws \
+     -v ~/.config/gcloud:/root/.config/gcloud \
+     subbu-k8s-console
+   ```
 
 ## Usage Guide
 
-### Accessing the Dashboard
+### Dashboard Navigation
 
-1. Open a web browser and navigate to http://localhost:8000 (or your deployment URL)
-2. You'll see the main dashboard interface
+1. Open the web interface at http://localhost:8000
+2. Use the intuitive dashboard to:
+   - Add new clusters
+   - Discover available clusters
+   - View detailed resource information
 
-### Connecting to an EKS Cluster
+### Connecting Clusters
 
-1. Click the "Add Cluster" button
-2. Fill in the cluster details:
+1. Click "Add Cluster"
+2. Select cloud provider (AWS or GKE)
+3. Enter cluster details:
    - Cluster name
-   - AWS region
-   - Authentication method (AWS credentials or AWS profile)
-3. Click "Connect"
-4. Once connected, the cluster will appear in the dashboard
-
-### Discovering Available Clusters
-
-1. Click the "Discover Clusters" button
-2. Select the AWS region where your clusters are located
-3. Choose your authentication method
-4. Click "Discover Clusters"
-5. The available clusters will be listed
-6. Click "Connect" on any cluster to add it to your dashboard
-
-### Viewing Cluster Resources
-
-1. From the dashboard, click "View Resources" on any connected cluster
-2. Use the tabs to navigate between different resource types:
-   - Pods
-   - Deployments
-   - Services
-   - Nodes
-3. Each tab shows a table of available resources with relevant details
-4. Use the "Refresh" button to update the resource information
-
-### API Testing
-
-1. Navigate to the API Test page at http://localhost:8000/test.html
-2. Use the provided buttons to test different API operations:
-   - Test Health: Check if the API is running
-   - Test List Clusters: List all connected clusters
-   - Test Discover Clusters: Discover available clusters in AWS
-   - Test Connect to Cluster: Connect to a specific cluster
-   - Test List Pods: List all pods in the connected cluster
-   - Discover API: Attempt to discover API endpoints
+   - Region
+   - Authentication method
+4. Connect and start exploring!
 
 ## API Reference
 
-### Available Endpoints
+### Core Endpoints
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/health` | GET | Check API health |
-| `/api/clusters` | GET | List all connected clusters |
-| `/api/clusters/connect` | POST | Connect to an EKS cluster |
-| `/api/clusters/available` | POST | List available EKS clusters |
-| `/api/clusters/<connection_id>/disconnect` | POST | Disconnect from a cluster |
-| `/api/clusters/<connection_id>/resources/<resource_type>` | GET | Get resources from a cluster |
-| `/api/clusters/<connection_id>/pods` | GET | Get pods from a cluster |
-
-### API Request Examples
-
-**Connect to a cluster**:
-```json
-POST /api/clusters/connect
-{
-  "cluster_name": "demo-cluster",
-  "region": "us-east-1",
-  "auth_type": "profile",
-  "profile_name": "default"
-}
-```
-
-**Discover available clusters**:
-```json
-POST /api/clusters/available
-{
-  "region": "us-east-1",
-  "auth_type": "profile",
-  "profile_name": "default"
-}
-```
+| `/api/health` | GET | Check application status |
+| `/api/clusters` | GET | List connected clusters |
+| `/api/clusters/connect` | POST | Connect to a new cluster |
+| `/api/clusters/available` | POST | Discover available clusters |
+| `/api/clusters/<id>/resources` | GET | Retrieve cluster resources |
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Connection failures**:
-   - Verify AWS credentials have EKS permissions
-   - Check cluster name and region are correct
-   - Ensure network connectivity to AWS APIs
+1. **Connection Problems**:
+   - Verify cloud provider credentials
+   - Check network connectivity
+   - Ensure proper IAM permissions
 
-2. **Cannot view resources**:
-   - Verify the cluster connection was successful
-   - Check AWS IAM permissions for Kubernetes RBAC
-   - Restart the application to reinitialize the connector
-
-3. **Clusters not appearing in dashboard**:
-   - Ensure the application is running with persistent state
-   - Check browser console for JavaScript errors
-   - Verify the API responses in the Network tab
-
-### Logs
-
-- Backend logs are printed to the console
-- Check browser developer tools for frontend errors
-- Set environment variable `FLASK_DEBUG=1` for more detailed logs
+2. **Resource Visibility**:
+   - Confirm cluster connection
+   - Validate Kubernetes RBAC settings
+   - Check authentication configuration
 
 ## Security Considerations
 
-1. **AWS Credentials**:
-   - Use IAM roles instead of access keys when possible
-   - Implement least privilege for AWS permissions
-   - Consider using temporary credentials with AWS STS
+1. **Cloud Provider Security**:
+   - Use IAM roles with least privilege
+   - Implement temporary credentials
+   - Secure kubeconfig management
 
-2. **API Security**:
-   - Implement proper authentication for the API in production
+2. **Application Security**:
    - Use HTTPS for all communications
-   - Consider adding rate limiting to prevent abuse
+   - Implement authentication
+   - Apply rate limiting
 
-3. **Kubernetes RBAC**:
-   - Apply appropriate RBAC policies to limit resource access
-   - Use read-only permissions when possible
-   - Consider namespace restrictions for multi-tenant usage
+## Future Roadmap
 
-## Future Enhancements
+- Advanced multi-cluster management
+- Enhanced monitoring and metrics
+- User authentication system
+- More cloud provider integrations
+- Advanced resource editing capabilities
 
-1. User authentication and multi-user support
-2. Persistent storage for cluster connections
-3. Advanced filtering and searching for resources
-4. Resource editing capabilities
-5. Metrics and monitoring integration
-6. Enhanced visualization with graphs and charts
-7. Support for multiple Kubernetes providers beyond EKS
+## Contributing
+
+Contributions are welcome! Please check our GitHub repository for guidelines on:
+- Reporting issues
+- Submitting pull requests
+- Development setup
+
+## License
+
+[Specify your project's license]
 
 ---
 
-## Implementation Details
-
-### Core Components
-
-#### EKS Connector
-
-The EKS Connector is the heart of the application, responsible for:
-
-1. Discovering EKS clusters in AWS accounts
-2. Connecting to clusters using appropriate authentication
-3. Retrieving Kubernetes resources from connected clusters
-4. Managing cluster connection state
-
-It interfaces with:
-- AWS SDK (boto3) for EKS operations
-- Kubernetes Python client for K8s API operations
-- kubeconfig generation for cluster authentication
-
-#### Flask Application
-
-The Flask application provides the REST API interface and serves the frontend. Key features:
-
-1. Persistent EKS connector instance for state management
-2. API endpoints for cluster operations
-3. Resource retrieval with proper error handling
-4. Static file serving for the frontend assets
-
-#### Frontend UI
-
-The frontend is built with modern web technologies:
-
-1. Bootstrap for responsive layout and components
-2. Fetch API for asynchronous communication with backend
-3. Modular JavaScript for maintainable code
-4. Dynamic content rendering with DOM manipulation
+**Built with ❤️ for Kubernetes Enthusiasts**
