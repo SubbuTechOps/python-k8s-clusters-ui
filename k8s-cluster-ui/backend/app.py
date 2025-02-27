@@ -3,6 +3,12 @@ from flask_cors import CORS
 import os
 import time
 
+# Create a persistent EKS connector that lives outside request context
+from eks_connector import EKSConnector
+# Create it once at module level instead of per request
+persistent_eks_connector = EKSConnector()
+print("Created persistent EKS connector")
+
 # Debug print to verify static folder path
 static_folder_path = os.path.abspath("../frontend")
 print(f"Looking for static files in: {static_folder_path}")
@@ -11,16 +17,9 @@ print(f"Looking for static files in: {static_folder_path}")
 app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
 CORS(app, resources={r"/api/*": {"origins": "*"}})  
 
-# Lazy initialization for EKS connector
+# Use the persistent connector instead of creating one per request
 def get_eks_connector():
-    from eks_connector import EKSConnector
-    eks_connector = getattr(g, '_eks_connector', None)
-    if eks_connector is None:
-        start_time = time.time()
-        eks_connector = EKSConnector()
-        print(f"EKSConnector initialization took: {time.time() - start_time} seconds")
-        g._eks_connector = eks_connector
-    return eks_connector
+    return persistent_eks_connector
 
 # ---------------- FRONTEND ROUTES ----------------
 @app.route('/')
@@ -122,22 +121,35 @@ def get_resources(connection_id, resource_type):
     """Get resources of a specific type from a connected cluster"""
     eks_connector = get_eks_connector()
     valid_resource_types = ['pods', 'deployments', 'services', 'nodes']
+    
+    # Debug log
+    print(f"Attempting to get {resource_type} for connection {connection_id}")
+    print(f"Available connections: {list(eks_connector.connected_clusters.keys())}")
+    
     if resource_type not in valid_resource_types:
         return jsonify({"success": False, "message": f"Invalid resource type. Supported: {', '.join(valid_resource_types)}"}), 400
 
     result = eks_connector.get_resources(connection_id, resource_type)
     return jsonify(result), 200 if result.get("success", False) else 500
 
+# Add this convenience endpoint for pods specifically to match the test.html expectations
+@app.route('/api/clusters/<connection_id>/pods', methods=['GET'])
+def get_pods(connection_id):
+    """Get pods from a connected cluster - convenience endpoint"""
+    eks_connector = get_eks_connector()
+    result = eks_connector.get_resources(connection_id, 'pods')
+    return jsonify(result), 200 if result.get("success", False) else 500
+
 # Add this for testing EKS connectivity
 @app.route('/api/test-eks-list', methods=['GET'])
 def test_eks_list():
-    from eks_connector import EKSConnector
-    connector = EKSConnector()
-    result = connector.list_available_clusters(
+    eks_connector = get_eks_connector()
+    result = eks_connector.list_available_clusters(
         region='us-east-1'
         # Using environment credentials
     )
     return jsonify(result)
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Basic health check endpoint"""
