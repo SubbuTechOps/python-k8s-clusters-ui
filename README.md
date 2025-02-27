@@ -65,8 +65,6 @@ flowchart TD
     class K8S_API,PODS,DEPLOY,SVC,NODES k8s
 ```
 
-### System Architecture
-
 ```
 +-------------------+        +-------------------+        +-------------------+
 |   Frontend Layer  |        |   API Layer       |        |   Cloud Provider  |
