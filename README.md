@@ -231,7 +231,7 @@ A Kubernetes console UI built with Python and Flask.
 
 ## 📸 Screenshots
 
-### Home Dashboard
+### Home Page
 ![Home Dashboard](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/Homepage.png)
 ![Home Dashboard](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/Homepage-2.png)
 
@@ -239,13 +239,13 @@ A Kubernetes console UI built with Python and Flask.
 ![EKS Dashboard](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard.png)
 
 ### EKS Cluster Discovery
-![EKS Cluster Discovery](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/eks-discovery.png)
+![EKS Cluster Discovery](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/Discover%20EKS%20Cluster.png)
 
 ### EKS Cluster View
-![EKS Cluster View](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/eks-cluster-view.png)
+![EKS Cluster View](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard.png)
 
 ### Pod Management
-![Pod Management](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/pods-view.png)
+![Pod Management](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-2.png)
 
 ### Deployment View
 ![Deployment View](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/deployments-view.png)
