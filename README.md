@@ -229,6 +229,37 @@ A Kubernetes console UI built with Python and Flask.
 5. **Access the Console**
    - Open your browser and navigate to `http://localhost:5000`
 
+## 📸 Screenshots
+
+### Home Dashboard
+![Home Dashboard](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/home-dashboard.png)
+
+### EKS Dashboard - No Clusters
+![EKS Empty Dashboard](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/eks-empty.png)
+
+### EKS Cluster Discovery
+![EKS Cluster Discovery](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/eks-discovery.png)
+
+### EKS Cluster View
+![EKS Cluster View](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/eks-cluster-view.png)
+
+### Pod Management
+![Pod Management](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/pods-view.png)
+
+### Deployment View
+![Deployment View](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/deployments-view.png)
+
+### Service Management
+![Service Management](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/services-view.png)
+
+### Node Information
+![Node Information](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/nodes-view.png)
+
+### GKE Dashboard (Coming Soon)
+![GKE Dashboard](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/gke-coming-soon.png)
+
+---
+
 ## 📋 Features
 
 - Dashboard for Kubernetes cluster overview
