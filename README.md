@@ -283,7 +283,7 @@ sequenceDiagram
    ```
 
 5. **Access the Console**
-   - Open your browser and navigate to `http://localhost:5000`
+   - Open your browser and navigate to `http://localhost:8000`
 ---
 
 ## 📸 Screenshots
