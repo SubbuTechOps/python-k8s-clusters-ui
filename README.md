@@ -228,6 +228,7 @@ A Kubernetes console UI built with Python and Flask.
 
 5. **Access the Console**
    - Open your browser and navigate to `http://localhost:5000`
+---
 
 ## 📸 Screenshots
 
@@ -242,22 +243,27 @@ A Kubernetes console UI built with Python and Flask.
 ![EKS Cluster Discovery](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/Discover%20EKS%20Cluster.png)
 
 ### EKS Cluster View
-![EKS Cluster View](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard.png)
+![EKS Cluster View](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-3.png)
 
 ### Pod Management
-![Pod Management](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-2.png)
+![Pod Management](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-4.png)
+![Pod Management](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-5.png)
+![Pod Management](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-6.png)
 
 ### Deployment View
-![Deployment View](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/deployments-view.png)
+![Deployment View](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-Deployments.png)
 
 ### Service Management
-![Service Management](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/services-view.png)
+![Service Management](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-Services.png)
 
 ### Node Information
-![Node Information](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/nodes-view.png)
+![Node Information](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-Nodes.png)
 
 ### GKE Dashboard (Coming Soon)
-![GKE Dashboard](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/gke-coming-soon.png)
+![GKE Dashboard](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/GKE-Dashboard.png)
+
+### API Test Console
+![API Test Console](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/API%20Test%20Console.png)
 
 ---
 
