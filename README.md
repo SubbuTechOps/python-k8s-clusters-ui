@@ -181,6 +181,116 @@ sequenceDiagram
 |----------|--------|-------------|
 | `/api/health` | GET | Check API status |
 
+## Deployment Steps
+# SubbuK8sConsole
+
+A Kubernetes console UI built with Python and Flask.
+
+![SubbuK8sConsole Logo](https://via.placeholder.com/150)
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.6+
+- Git
+- pip (Python package manager)
+
+### Installation & Setup
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/SubbuTechOps/python-k8s-console-ui.git
+   cd python-k8s-console-ui
+   ```
+
+2. **Create Virtual Environment**
+   ```bash
+   # Create a virtual environment
+   python -m venv venv
+
+   # Activate the virtual environment
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
+   ```
+
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Launch Application**
+   ```bash
+   cd ./backend
+   python app.py
+   ```
+
+5. **Access the Console**
+   - Open your browser and navigate to `http://localhost:5000`
+
+## 📋 Features
+
+- Dashboard for Kubernetes cluster overview
+- Pod management and monitoring
+- Deployment configuration and scaling
+- Service and ingress management
+- Real-time logs and events
+- Resource usage visualization
+
+## 🔧 Configuration
+
+The application can be configured using environment variables or a `.env` file in the project root:
+
+```
+K8S_CONTEXT=your-context
+FLASK_ENV=development
+FLASK_DEBUG=1
+```
+
+## 🔍 Troubleshooting
+
+Common issues and solutions:
+
+- **Port already in use**: Change the port in `app.py` or set `FLASK_RUN_PORT` environment variable
+- **Kubernetes connection issues**: Ensure your kubeconfig is properly set up
+- **Missing dependencies**: Verify virtual environment is activated before installing requirements
+
+## 🚢 Deploying to Production
+
+For production environments:
+
+1. **Use a WSGI Server**
+   ```bash
+   pip install gunicorn
+   gunicorn -w 4 -b 0.0.0.0:5000 app:app
+   ```
+
+2. **Set up a Reverse Proxy**
+   - Configure Nginx or Apache as a reverse proxy
+   - Enable HTTPS with Let's Encrypt certificates
+
+3. **Set Environment Variables**
+   ```bash
+   export FLASK_ENV=production
+   export FLASK_DEBUG=0
+   ```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License 
+
+
 ## Authentication Methods
 
 ### 1. AWS Credentials Authentication
