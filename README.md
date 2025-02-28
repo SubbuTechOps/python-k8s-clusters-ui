@@ -311,7 +311,7 @@ sequenceDiagram
 
 ### Service Management
 ![Service Management](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-Services.png)
-![Service Management](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-Services-2.png)
+![Service Management](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-Services2.png)
 
 ### Node Information
 ![Node Information](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/AWS%20Dashboard-Nodes.png)
