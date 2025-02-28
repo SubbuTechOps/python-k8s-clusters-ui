@@ -66,16 +66,80 @@ flowchart TD
 ```
 
 ```
-+-------------------+        +-------------------+        +-------------------+
-|   Frontend Layer  |        |   API Layer       |        |   Cloud Provider  |
-|   (HTML/JS/CSS)  | <----> |   (Flask Backend) | <----> |   (AWS/GCP)       |
-+-------------------+        +-------------------+        +-------------------+
-        |                            |                            |
-        |                            |                            |
-+-------------------+        +-------------------+        +-------------------+
-| Browser Interface |        | EKS Connector     |        | Kubernetes Cluster|
-| (User Interaction)|        | (Resource Manager)|        | (EKS/GKE)         |
-+-------------------+        +-------------------+        +-------------------+
+graph TD
+    %% Client Components
+    HTML[HTML/CSS UI]
+    JS[JavaScript]
+    BOOTSTRAP[Bootstrap Framework]
+    
+    %% Server Components
+    FLASK[Flask Web Server]
+    EKSCONN[EKS Connector]
+    GKECONN[GKE Connector]
+    K8SCLIENT[Kubernetes Client]
+    BOTO3[boto3 AWS SDK]
+    GOOGLEAPI[Google Cloud SDK]
+    KUBECONFIG[Kubeconfig Generator]
+    
+    %% API Routes
+    HEALTH[Health API]
+    CLUSTERS[Clusters API]
+    CONNECT[Connect API]
+    AVAILABLE[Available API]
+    RESOURCES[Resources API]
+    
+    %% External Services
+    AWS_API[AWS EKS API]
+    GCP_API[Google Cloud GKE API]
+    K8S_API[Kubernetes API]
+    
+    %% Client Relationships
+    JS --> HTML
+    BOOTSTRAP --> HTML
+    
+    %% Server Relationships
+    FLASK --> HEALTH
+    FLASK --> CLUSTERS
+    FLASK --> CONNECT
+    FLASK --> AVAILABLE
+    FLASK --> RESOURCES
+    
+    CONNECT --> EKSCONN
+    CONNECT --> GKECONN
+    AVAILABLE --> EKSCONN
+    AVAILABLE --> GKECONN
+    RESOURCES --> EKSCONN
+    RESOURCES --> GKECONN
+    
+    EKSCONN --> BOTO3
+    EKSCONN --> K8SCLIENT
+    EKSCONN --> KUBECONFIG
+    
+    GKECONN --> GOOGLEAPI
+    GKECONN --> K8SCLIENT
+    
+    BOTO3 --> AWS_API
+    GOOGLEAPI --> GCP_API
+    K8SCLIENT --> K8S_API
+    
+    %% Client-Server Relationship
+    HTML --> FLASK
+    FLASK --> HTML
+    
+    %% Styling
+    classDef client fill:#f9f9f9,stroke:#333
+    classDef server fill:#e6f3ff,stroke:#333
+    classDef eks fill:#ffe6cc,stroke:#333
+    classDef gke fill:#d9ead3,stroke:#333
+    classDef api fill:#fff2cc,stroke:#333
+    classDef external fill:#f5f5f5,stroke:#333
+    
+    class HTML,JS,BOOTSTRAP client
+    class FLASK,K8SCLIENT server
+    class EKSCONN,BOTO3,KUBECONFIG eks
+    class GKECONN,GOOGLEAPI gke
+    class HEALTH,CLUSTERS,CONNECT,AVAILABLE,RESOURCES api
+    class AWS_API,GCP_API,K8S_API external
 ```
 
 ### Component Breakdown
@@ -182,13 +246,6 @@ sequenceDiagram
 | `/api/health` | GET | Check API status |
 
 ## Deployment Steps
-# SubbuK8sConsole
-
-A Kubernetes console UI built with Python and Flask.
-
-![SubbuK8sConsole Logo](https://via.placeholder.com/150)
-
-## 🚀 Quick Start
 
 ### Prerequisites
 - Python 3.6+
@@ -266,25 +323,13 @@ A Kubernetes console UI built with Python and Flask.
 ![API Test Console](https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/API%20Test%20Console.png)
 
 ---
+## Getting Started
 
-## 📋 Features
-
-- Dashboard for Kubernetes cluster overview
-- Pod management and monitoring
-- Deployment configuration and scaling
-- Service and ingress management
-- Real-time logs and events
-- Resource usage visualization
-
-## 🔧 Configuration
-
-The application can be configured using environment variables or a `.env` file in the project root:
-
-```
-K8S_CONTEXT=your-context
-FLASK_ENV=development
-FLASK_DEBUG=1
-```
+1. Configure AWS credentials
+2. Install dependencies
+3. Start the application
+4. Discover and connect to clusters
+5. Explore Kubernetes resources
 
 ## 🔍 Troubleshooting
 
@@ -313,21 +358,6 @@ For production environments:
    export FLASK_ENV=production
    export FLASK_DEBUG=0
    ```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License 
-
 
 ## Authentication Methods
 
@@ -374,21 +404,18 @@ The API provides comprehensive error responses:
 - Persistent cluster connection state
 - Real-time cluster monitoring
 
-## Getting Started
+## 🤝 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Configure AWS credentials
-2. Install dependencies
-3. Start the application
-4. Discover and connect to clusters
-5. Explore Kubernetes resources
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Troubleshooting
+## 📝 License
 
-- Verify AWS credentials
-- Check network connectivity
-- Review application logs
-- Ensure proper IAM permissions
-
+This project is licensed under the MIT License 
 ---
 
 **Built with ❤️ for Kubernetes Administrators**
