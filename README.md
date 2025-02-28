@@ -64,8 +64,7 @@ flowchart TD
     class AWS,GCP cloud
     class K8S_API,PODS,DEPLOY,SVC,NODES k8s
 ```
-
-```
+```mermaid
 graph TD
     %% Client Components
     HTML[HTML/CSS UI]
