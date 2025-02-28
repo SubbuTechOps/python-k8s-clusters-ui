@@ -232,7 +232,7 @@ A Kubernetes console UI built with Python and Flask.
 ## 📸 Screenshots
 
 ### Home Dashboard
-![Home Dashboard](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/home-dashboard.png)
+https://github.com/SubbuTechOps/python-k8s-clusters-ui/raw/master/k8s-cluster-ui/screenshots/Homepage.png
 
 ### EKS Dashboard - No Clusters
 ![EKS Empty Dashboard](https://github.com/SubbuTechOps/python-k8s-console-ui/raw/main/screenshots/eks-empty.png)
